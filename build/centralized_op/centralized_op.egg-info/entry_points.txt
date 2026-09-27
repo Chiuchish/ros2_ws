@@ -1,0 +1,6 @@
+[console_scripts]
+agent_node = centralized_op.agent_node:main
+central_node = centralized_op.central_node:main
+control_node = centralized_op.control_limit:main
+evaluator_node = centralized_op.data_analyst:main
+visualizer_node = centralized_op.visualizer_color:main

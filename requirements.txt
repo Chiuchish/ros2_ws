@@ -1,0 +1,12 @@
+# 核心計算與資料處理
+numpy==1.26.4
+pandas>=2.2.0
+pgmpy<1.0.0
+
+# 允許向下相容的小修復更新
+pydantic~=2.7.0
+
+# 條件相容（僅在 Linux 系統安裝）
+uvloop>=0.19.0; sys_platform == 'linux'
+
+

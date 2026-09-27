@@ -1,0 +1,35 @@
+[1.001s] Invoking command in '/home/ryan/ros2_ws/src/formation_control': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/formation_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/formation_control build --build-base /home/ryan/ros2_ws/build/formation_control/build install --record /home/ryan/ros2_ws/build/formation_control/install.log --install-scripts $base/lib/formation_control --single-version-externally-managed install_data
+[1.258s] running egg_info
+[1.276s] writing ../../build/formation_control/formation_control.egg-info/PKG-INFO
+[1.279s] writing dependency_links to ../../build/formation_control/formation_control.egg-info/dependency_links.txt
+[1.279s] writing entry points to ../../build/formation_control/formation_control.egg-info/entry_points.txt
+[1.279s] writing requirements to ../../build/formation_control/formation_control.egg-info/requires.txt
+[1.279s] writing top-level names to ../../build/formation_control/formation_control.egg-info/top_level.txt
+[1.316s] reading manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+[1.317s] writing manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+[1.318s] running build
+[1.318s] running build_py
+[1.318s] copying formation_control/bayesian_node.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+[1.319s] copying formation_control/CBN.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+[1.319s] copying formation_control/formation_control.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+[1.319s] copying formation_control/dynamic_control.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+[1.319s] running install
+[1.325s] running install_lib
+[1.344s] copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/bayesian_node.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+[1.345s] copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/CBN.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+[1.345s] copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/formation_control.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+[1.345s] copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/dynamic_control.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+[1.346s] byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/bayesian_node.py to bayesian_node.cpython-312.pyc
+[1.350s] byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/CBN.py to CBN.cpython-312.pyc
+[1.352s] byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/formation_control.py to formation_control.cpython-312.pyc
+[1.354s] byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/dynamic_control.py to dynamic_control.cpython-312.pyc
+[1.355s] running install_data
+[1.356s] running install_egg_info
+[1.376s] removing '/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control-0.0.0-py3.12.egg-info' (and everything under it)
+[1.376s] Copying ../../build/formation_control/formation_control.egg-info to /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control-0.0.0-py3.12.egg-info
+[1.377s] running install_scripts
+[1.498s] Installing bayesian_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.499s] Installing control_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.499s] Installing visualizer_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.499s] writing list of installed files to '/home/ryan/ros2_ws/build/formation_control/install.log'
+[1.559s] Invoked command in '/home/ryan/ros2_ws/src/formation_control' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/formation_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/formation_control build --build-base /home/ryan/ros2_ws/build/formation_control/build install --record /home/ryan/ros2_ws/build/formation_control/install.log --install-scripts $base/lib/formation_control --single-version-externally-managed install_data

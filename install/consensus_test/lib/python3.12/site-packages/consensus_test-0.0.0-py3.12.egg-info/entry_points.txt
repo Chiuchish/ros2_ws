@@ -1,0 +1,7 @@
+[console_scripts]
+Parameterized_bayesian_node = consensus_test.bayesian_para:main
+bayesian_auction_node = consensus_test.bayesian_auction_node:main
+bayesian_node = consensus_test.bayesian_node:main
+control_limit_node = consensus_test.control_limit:main
+control_node = consensus_test.control_node:main
+visualizer_node = consensus_test.visualizer_node:main

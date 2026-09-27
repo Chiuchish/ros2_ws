@@ -1,0 +1,60 @@
+running egg_info
+creating ../../build/consensus_test/consensus_test.egg-info
+writing ../../build/consensus_test/consensus_test.egg-info/PKG-INFO
+writing dependency_links to ../../build/consensus_test/consensus_test.egg-info/dependency_links.txt
+writing entry points to ../../build/consensus_test/consensus_test.egg-info/entry_points.txt
+writing requirements to ../../build/consensus_test/consensus_test.egg-info/requires.txt
+writing top-level names to ../../build/consensus_test/consensus_test.egg-info/top_level.txt
+writing manifest file '../../build/consensus_test/consensus_test.egg-info/SOURCES.txt'
+reading manifest file '../../build/consensus_test/consensus_test.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/consensus_test/consensus_test.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/ryan/ros2_ws/build/consensus_test/build
+creating /home/ryan/ros2_ws/build/consensus_test/build/lib
+creating /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/bayesian_node.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/__init__.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/visualizer_node.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/bayesian_auction_node.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/bayesian_para.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/control_node.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+copying consensus_test/control_limit.py -> /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test
+running install
+running install_lib
+creating /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/bayesian_node.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/__init__.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/visualizer_node.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/bayesian_auction_node.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/bayesian_para.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/control_node.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+copying /home/ryan/ros2_ws/build/consensus_test/build/lib/consensus_test/control_limit.py -> /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/bayesian_node.py to bayesian_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/visualizer_node.py to visualizer_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/bayesian_auction_node.py to bayesian_auction_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/bayesian_para.py to bayesian_para.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/control_node.py to control_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test/control_limit.py to control_limit.cpython-312.pyc
+running install_data
+creating /home/ryan/ros2_ws/install/consensus_test/share/ament_index
+creating /home/ryan/ros2_ws/install/consensus_test/share/ament_index/resource_index
+creating /home/ryan/ros2_ws/install/consensus_test/share/ament_index/resource_index/packages
+copying resource/consensus_test -> /home/ryan/ros2_ws/install/consensus_test/share/ament_index/resource_index/packages
+copying package.xml -> /home/ryan/ros2_ws/install/consensus_test/share/consensus_test
+creating /home/ryan/ros2_ws/install/consensus_test/share/consensus_test/launch
+copying launch/bayesian_launch.py -> /home/ryan/ros2_ws/install/consensus_test/share/consensus_test/launch
+copying launch/multi_consensus_launch.py -> /home/ryan/ros2_ws/install/consensus_test/share/consensus_test/launch
+copying launch/multi_agent_launch.py -> /home/ryan/ros2_ws/install/consensus_test/share/consensus_test/launch
+running install_egg_info
+Copying ../../build/consensus_test/consensus_test.egg-info to /home/ryan/ros2_ws/install/consensus_test/lib/python3.12/site-packages/consensus_test-0.0.0-py3.12.egg-info
+running install_scripts
+Installing Parameterized_bayesian_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+Installing bayesian_auction_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+Installing bayesian_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+Installing control_limit_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+Installing control_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+Installing visualizer_node script to /home/ryan/ros2_ws/install/consensus_test/lib/consensus_test
+writing list of installed files to '/home/ryan/ros2_ws/build/consensus_test/install.log'

@@ -1,0 +1,17 @@
+services:
+  ros2_dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: my_ros2_container
+    stdin_open: true 
+    tty: true
+    network_mode: "host"
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/root/.Xauthority
+    volumes:
+      - ./src:/ros2_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/root/.Xauthority:rw

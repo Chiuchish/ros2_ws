@@ -1,0 +1,53 @@
+running egg_info
+creating ../../build/formation_control/formation_control.egg-info
+writing ../../build/formation_control/formation_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/formation_control/formation_control.egg-info/dependency_links.txt
+writing entry points to ../../build/formation_control/formation_control.egg-info/entry_points.txt
+writing requirements to ../../build/formation_control/formation_control.egg-info/requires.txt
+writing top-level names to ../../build/formation_control/formation_control.egg-info/top_level.txt
+writing manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+reading manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/ryan/ros2_ws/build/formation_control/build
+creating /home/ryan/ros2_ws/build/formation_control/build/lib
+creating /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/bayesian_node.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/__init__.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/visualizer_node.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/CBN.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/formation_control.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+copying formation_control/dynamic_control.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+running install
+running install_lib
+creating /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/bayesian_node.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/__init__.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/visualizer_node.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/CBN.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/formation_control.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/dynamic_control.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/bayesian_node.py to bayesian_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/visualizer_node.py to visualizer_node.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/CBN.py to CBN.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/formation_control.py to formation_control.cpython-312.pyc
+byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/dynamic_control.py to dynamic_control.cpython-312.pyc
+running install_data
+creating /home/ryan/ros2_ws/install/formation_control/share/ament_index
+creating /home/ryan/ros2_ws/install/formation_control/share/ament_index/resource_index
+creating /home/ryan/ros2_ws/install/formation_control/share/ament_index/resource_index/packages
+copying resource/formation_control -> /home/ryan/ros2_ws/install/formation_control/share/ament_index/resource_index/packages
+copying package.xml -> /home/ryan/ros2_ws/install/formation_control/share/formation_control
+creating /home/ryan/ros2_ws/install/formation_control/share/formation_control/launch
+copying launch/bayesian_launch.py -> /home/ryan/ros2_ws/install/formation_control/share/formation_control/launch
+copying launch/multi_consensus_launch.py -> /home/ryan/ros2_ws/install/formation_control/share/formation_control/launch
+copying launch/multi_agent_launch.py -> /home/ryan/ros2_ws/install/formation_control/share/formation_control/launch
+running install_egg_info
+Copying ../../build/formation_control/formation_control.egg-info to /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control-0.0.0-py3.12.egg-info
+running install_scripts
+Installing bayesian_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+Installing control_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+Installing visualizer_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+writing list of installed files to '/home/ryan/ros2_ws/build/formation_control/install.log'

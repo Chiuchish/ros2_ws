@@ -1,0 +1,27 @@
+[0.894s] Invoking command in '/home/ryan/ros2_ws/src/centralized_op': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/centralized_op/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/centralized_op build --build-base /home/ryan/ros2_ws/build/centralized_op/build install --record /home/ryan/ros2_ws/build/centralized_op/install.log --install-scripts $base/lib/centralized_op --single-version-externally-managed install_data
+[1.186s] running egg_info
+[1.206s] writing ../../build/centralized_op/centralized_op.egg-info/PKG-INFO
+[1.206s] writing dependency_links to ../../build/centralized_op/centralized_op.egg-info/dependency_links.txt
+[1.206s] writing entry points to ../../build/centralized_op/centralized_op.egg-info/entry_points.txt
+[1.206s] writing requirements to ../../build/centralized_op/centralized_op.egg-info/requires.txt
+[1.206s] writing top-level names to ../../build/centralized_op/centralized_op.egg-info/top_level.txt
+[1.247s] reading manifest file '../../build/centralized_op/centralized_op.egg-info/SOURCES.txt'
+[1.248s] writing manifest file '../../build/centralized_op/centralized_op.egg-info/SOURCES.txt'
+[1.248s] running build
+[1.248s] running build_py
+[1.248s] copying centralized_op/visualizer_color.py -> /home/ryan/ros2_ws/build/centralized_op/build/lib/centralized_op
+[1.249s] running install
+[1.256s] running install_lib
+[1.276s] copying /home/ryan/ros2_ws/build/centralized_op/build/lib/centralized_op/visualizer_color.py -> /home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages/centralized_op
+[1.277s] byte-compiling /home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages/centralized_op/visualizer_color.py to visualizer_color.cpython-312.pyc
+[1.280s] running install_data
+[1.280s] running install_egg_info
+[1.301s] removing '/home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages/centralized_op-0.0.0-py3.12.egg-info' (and everything under it)
+[1.302s] Copying ../../build/centralized_op/centralized_op.egg-info to /home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages/centralized_op-0.0.0-py3.12.egg-info
+[1.302s] running install_scripts
+[1.438s] Installing agent_node script to /home/ryan/ros2_ws/install/centralized_op/lib/centralized_op
+[1.439s] Installing central_node script to /home/ryan/ros2_ws/install/centralized_op/lib/centralized_op
+[1.439s] Installing control_node script to /home/ryan/ros2_ws/install/centralized_op/lib/centralized_op
+[1.439s] Installing visualizer_node script to /home/ryan/ros2_ws/install/centralized_op/lib/centralized_op
+[1.439s] writing list of installed files to '/home/ryan/ros2_ws/build/centralized_op/install.log'
+[1.467s] Invoked command in '/home/ryan/ros2_ws/src/centralized_op' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/centralized_op/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/centralized_op/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/centralized_op build --build-base /home/ryan/ros2_ws/build/centralized_op/build install --record /home/ryan/ros2_ws/build/centralized_op/install.log --install-scripts $base/lib/centralized_op --single-version-externally-managed install_data

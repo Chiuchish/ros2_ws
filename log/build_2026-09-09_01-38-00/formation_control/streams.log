@@ -1,0 +1,26 @@
+[0.870s] Invoking command in '/home/ryan/ros2_ws/src/formation_control': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/formation_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/formation_control build --build-base /home/ryan/ros2_ws/build/formation_control/build install --record /home/ryan/ros2_ws/build/formation_control/install.log --install-scripts $base/lib/formation_control --single-version-externally-managed install_data
+[1.157s] running egg_info
+[1.179s] writing ../../build/formation_control/formation_control.egg-info/PKG-INFO
+[1.179s] writing dependency_links to ../../build/formation_control/formation_control.egg-info/dependency_links.txt
+[1.179s] writing entry points to ../../build/formation_control/formation_control.egg-info/entry_points.txt
+[1.180s] writing requirements to ../../build/formation_control/formation_control.egg-info/requires.txt
+[1.180s] writing top-level names to ../../build/formation_control/formation_control.egg-info/top_level.txt
+[1.221s] reading manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+[1.222s] writing manifest file '../../build/formation_control/formation_control.egg-info/SOURCES.txt'
+[1.222s] running build
+[1.222s] running build_py
+[1.222s] copying formation_control/visualizer_node.py -> /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control
+[1.222s] running install
+[1.230s] running install_lib
+[1.249s] copying /home/ryan/ros2_ws/build/formation_control/build/lib/formation_control/visualizer_node.py -> /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control
+[1.250s] byte-compiling /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control/visualizer_node.py to visualizer_node.cpython-312.pyc
+[1.251s] running install_data
+[1.251s] running install_egg_info
+[1.272s] removing '/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control-0.0.0-py3.12.egg-info' (and everything under it)
+[1.273s] Copying ../../build/formation_control/formation_control.egg-info to /home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages/formation_control-0.0.0-py3.12.egg-info
+[1.273s] running install_scripts
+[1.406s] Installing bayesian_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.406s] Installing control_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.406s] Installing visualizer_node script to /home/ryan/ros2_ws/install/formation_control/lib/formation_control
+[1.406s] writing list of installed files to '/home/ryan/ros2_ws/build/formation_control/install.log'
+[1.440s] Invoked command in '/home/ryan/ros2_ws/src/formation_control' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ryan/ros2_ws/build/formation_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ryan/ros2_ws/install/formation_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/formation_control build --build-base /home/ryan/ros2_ws/build/formation_control/build install --record /home/ryan/ros2_ws/build/formation_control/install.log --install-scripts $base/lib/formation_control --single-version-externally-managed install_data

@@ -1,0 +1,6 @@
+source;share/consensus_test/hook/pythonpath.ps1
+source;share/consensus_test/hook/pythonpath.dsv
+source;share/consensus_test/hook/pythonpath.sh
+source;share/consensus_test/hook/ament_prefix_path.ps1
+source;share/consensus_test/hook/ament_prefix_path.dsv
+source;share/consensus_test/hook/ament_prefix_path.sh

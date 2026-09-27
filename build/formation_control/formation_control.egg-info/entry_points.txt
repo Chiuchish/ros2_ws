@@ -1,0 +1,4 @@
+[console_scripts]
+bayesian_node = formation_control.CBN:main
+control_node = formation_control.dynamic_control:main
+visualizer_node = formation_control.visualizer_node:main

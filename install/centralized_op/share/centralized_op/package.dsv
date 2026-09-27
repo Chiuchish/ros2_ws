@@ -1,0 +1,6 @@
+source;share/centralized_op/hook/pythonpath.ps1
+source;share/centralized_op/hook/pythonpath.dsv
+source;share/centralized_op/hook/pythonpath.sh
+source;share/centralized_op/hook/ament_prefix_path.ps1
+source;share/centralized_op/hook/ament_prefix_path.dsv
+source;share/centralized_op/hook/ament_prefix_path.sh
