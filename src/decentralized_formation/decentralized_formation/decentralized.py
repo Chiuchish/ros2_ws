@@ -18,8 +18,8 @@ from pgmpy.inference import VariableElimination
 # ==========================================
 # 貝氏網路共用配置與離散區間定義
 # ==========================================
-TIME_BIN_SIZE = 0.1
-TIME_MAX_LIMIT = 20.0
+TIME_BIN_SIZE = 0.5
+TIME_MAX_LIMIT = 35.0
 NUM_TIME_BINS = int(TIME_MAX_LIMIT / TIME_BIN_SIZE)
 
 BATTERY_BIN_SIZE = 0.1
@@ -83,7 +83,7 @@ def build_bayesian_network():
     yes_table_F = []
     for i in range(num_time_states):
         ratio = i / denom
-        start_p = max(0.005, 0.900 - 0.88 * ratio)
+        start_p = max(0.005, 0.700 - 0.7 * ratio)
         end_p = max(0.010, 0.999 - 0.88 * ratio)
         row = np.linspace(start_p, end_p, num_battery_states)
         yes_table_F.append(row)
@@ -226,6 +226,10 @@ class RobotAgentNode(Node):
             self.pos_x = float(msg.data[0])
             self.pos_y = float(msg.data[1])
 
+        # ★ 接收運動節點回傳的真實動態電壓
+        if len(msg.data) >= 5:
+            self.voltage = float(msg.data[4])
+
     # ----------------------------------------------------
     # 接收新陣型並重置拍賣狀態機
     # ----------------------------------------------------
@@ -279,6 +283,24 @@ class RobotAgentNode(Node):
         self.prob_cache[key] = score
         return score
 
+    def estimate_battery_consumption(self, dist: float, speed: float) -> float:
+        """依據小車物理屬性精準前瞻預估抵達該 Slot 的剩餘電壓"""
+        time_req = (dist / speed) if speed > 0 else 99.0
+        
+        # 預估平均運動功率
+        p_base = 1.5
+        p_sensor = 4.0 if self.sensor_quality == 'Good' else 0.8
+        p_motion = (3.0 * speed) + (5.0 * (speed ** 2))
+        
+        # 總等效功率
+        avg_power = p_base + p_sensor + p_motion
+        
+        # 估算抵達後的壓降
+        total_energy_joules = avg_power * time_req
+        voltage_drop = (total_energy_joules / (2.2 * 3600.0 * 11.1)) * 1.6
+        
+        return max(10.0, self.voltage - voltage_drop)
+
     def calculate_slot_utility(self, slot_idx: int) -> float:
         """計算自己前往特定 Slot 的 BN 勝率"""
         target_x = self.target_center_x + self.slot_offsets_x[slot_idx]
@@ -286,7 +308,7 @@ class RobotAgentNode(Node):
         dist = math.hypot(self.pos_x - target_x, self.pos_y - target_y)
 
         time_req = (dist / self.max_speed) if self.max_speed > 0 else 99.0
-        exp_battery = self.voltage - (self.voltage_rate * time_req)
+        exp_battery = self.estimate_battery_consumption(dist, self.max_speed)
 
         c_state = get_time_state(time_req)
         d_state = battery_state(exp_battery)
@@ -394,7 +416,7 @@ class RobotAgentNode(Node):
         if sender_id not in self.collected_bids:
             self.collected_bids[sender_id] = data['utilities']
             self.get_logger().info(
-                f"📥 收到 Robot {sender_id} 出價 | 進度: [{len(self.collected_bids)}/{self.num_robots}]"
+                f"📥 收到 Robot {sender_id} 出價 | 進度: [{len(self.collected_bids)}/{self.num_robots} 出價:{self.collected_bids[sender_id]}]"
             )
 
         # 集滿 26 台車的出價後，立即執行匈牙利演算法

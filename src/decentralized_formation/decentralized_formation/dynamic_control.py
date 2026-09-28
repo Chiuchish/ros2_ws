@@ -18,6 +18,7 @@ class FormationControlAgent(Node):
         self.declare_parameter('k_nearest', 2)    # 動態選擇最近的 k 台車作為拓撲鄰居
         self.declare_parameter('target_center_x', 0.0)
         self.declare_parameter('target_center_y', 0.0)
+        self.declare_parameter('voltage', value=12.0)
         
         array_desc = ParameterDescriptor(type=ParameterType.PARAMETER_DOUBLE_ARRAY)
         self.declare_parameter('initial_value', value=[0.0, 0.0], descriptor=array_desc) 
@@ -36,7 +37,8 @@ class FormationControlAgent(Node):
         self.state = list(self.get_parameter('initial_value').value or [0.0, 0.0])
         self.slot_offsets_x = list(self.get_parameter('slot_offsets_x').value)
         self.slot_offsets_y = list(self.get_parameter('slot_offsets_y').value)
-        
+        self.voltage = float(self.get_parameter('voltage').value)
+        self.battery_capacity = 2.2
         # 狀態與目標座標
         self.my_slot = -1  
         self.offset_x = 0.0
@@ -49,7 +51,13 @@ class FormationControlAgent(Node):
         # 感測器漂移累積量 (僅針對 Poor 車款)
         self.accumulated_error_x = 0.0
         self.accumulated_error_y = 0.0
-        
+
+        # 異質硬體耗能係數設定
+        self.p_base = 1.5  # 基礎底噪 1.5W
+        self.p_sensor = 4.0 if self.sensor_quality == 'Good' else 0.8  # 高階感測器功耗較大
+        self.k_v1 = 3.0    # 速度線性阻力係數
+        self.k_v2 = 5.0    # 速度二次方電機耗能係數
+
         # 2. 訂閱當選 Auctioneer 發布的匈牙利指派名單
         self.create_subscription(
             String, 
@@ -103,7 +111,7 @@ class FormationControlAgent(Node):
                 self.target_y = self.target_center_y + self.offset_y
 
                 self.get_logger().info(
-                    f"🎯 Robot {self.robot_id} 鎖定 Slot {slot_index} -> 目標: ({self.target_x:.2f}, {self.target_y:.2f})"
+                    f"🎯 Robot {self.robot_id} 鎖定 Slot {slot_index} -> 目標: ({self.target_x:.2f}, {self.target_y:.2f}) 電量: {self.voltage}"
                 )
         except Exception as e:
             self.get_logger().error(f"解析分配結果失敗: {e}")
@@ -164,6 +172,23 @@ class FormationControlAgent(Node):
             u_x *= scale
             u_y *= scale
 
+        # Battery 1. 計算瞬時機械運動功率
+        p_motion = (self.k_v1 * speed_mag) + (self.k_v2 * (speed_mag ** 2))
+
+        # Battery 2. 計算感測器劣化帶來的控制抖動額外功耗 (Jitter Loss)
+        p_jitter = 0.0
+        if self.sensor_quality in ['Poor', 'poor', 'bad', 'Bad']:
+            # 當車速極低但在目標點附近顫動時，電機急開急停產生損耗
+            p_jitter = 1.2 * abs(random.gauss(0.0, 0.5))
+
+        # Battery 3. 瞬時總功率 (W)
+        p_total = self.p_base + self.p_sensor + p_motion + p_jitter
+
+        # Battery 4. 數值積分計算電壓下降量 (dt = self.timer_period)
+        # dV = (P * dt) / (Capacity * 3600 * V_nom) * 全幅電壓跨度 (約 1.6V)
+        dv = (p_total * self.timer_period) / (self.battery_capacity * 3600.0 * 11.1) * 1.6
+        self.voltage = max(10.9, self.voltage - dv)        
+
         # 4. 運動學積分更新真實座標
         self.state[0] += u_x * self.timer_period
         self.state[1] += u_y * self.timer_period
@@ -172,11 +197,17 @@ class FormationControlAgent(Node):
             
     def broadcast_state(self):
         msg = Float32MultiArray()
-        # ★ 關鍵修復：未獲得目標前只送 [x, y]；分配完成後才送 [x, y, target_x, target_y]
-        if self.my_slot == -1 or self.target_x is None:
-            msg.data = [float(self.state[0]), float(self.state[1])]
-        else:
-            msg.data = [float(self.state[0]), float(self.state[1]), float(self.target_x), float(self.target_y)]
+        tx = float(self.target_x) if self.target_x is not None else 0.0
+        ty = float(self.target_y) if self.target_y is not None else 0.0
+        
+        # 資料格式：[0:當前x, 1:當前y, 2:目標x, 3:目標y, 4:即時電壓]
+        msg.data = [
+            float(self.state[0]),
+            float(self.state[1]),
+            tx,
+            ty,
+            float(self.voltage)
+        ]
         self.publisher_.publish(msg)
 
 def main(args=None):
