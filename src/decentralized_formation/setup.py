@@ -29,7 +29,7 @@ setup(
         'console_scripts': [
         	'visualizer_node=decentralized_formation.visualizer_color:main',
             'agent_node=decentralized_formation.decentralized:main',
-            'control_node=decentralized_formation.dynamic_control:main',
+            'control_node=decentralized_formation.new_motion_control:main',
             'central_node=decentralized_formation.central_node:main',
             'evaluator_node=decentralized_formation.data_analyst:main',
             'formation_manager_node=decentralized_formation.formation_manager:main',            

@@ -16,12 +16,16 @@ class FormationManagerNode(Node):
         self.declare_parameter('auto_switch', False)          # 是否定時自動變換圖形
         self.declare_parameter('switch_interval', 10.0)       # 自動變換週期 (秒)
         self.declare_parameter('default_formation', 'grid')   # 初始圖形
+        self.declare_parameter('num_slots', 20)
+        self.declare_parameter('active_slots', 20)
 
         self.num_robots = int(self.get_parameter('num_robots').value)
         self.center_x = float(self.get_parameter('target_center_x').value)
         self.center_y = float(self.get_parameter('target_center_y').value)
         self.auto_switch = bool(self.get_parameter('auto_switch').value)
         self.switch_interval = float(self.get_parameter('switch_interval').value)
+        self.num_slots = int(self.get_parameter('num_slots').value)
+        self.active_slots = int(self.get_parameter('active_slots').value)
 
         # 2. 狀態變數
         self.formation_version = 0
@@ -47,10 +51,10 @@ class FormationManagerNode(Node):
     # 陣型幾何演算法生成庫 (支援任意規模與 26 機)
     # ==========================================
     def generate_grid_formation(self, spacing=1.2):
-        """方陣 (Grid): 近似對稱的 5 列網格"""
+        """方陣：限制只生成 active_slots (20 個)"""
         offsets_x, offsets_y = [], []
         cols = 5
-        rows = math.ceil(self.num_robots / cols)
+        rows = math.ceil(self.active_slots / cols)
         
         start_x = -((cols - 1) * spacing) / 2.0
         start_y = -((rows - 1) * spacing) / 2.0
@@ -58,7 +62,7 @@ class FormationManagerNode(Node):
         count = 0
         for r in range(rows):
             for c in range(cols):
-                if count >= self.num_robots:
+                if count >= self.active_slots:  # ★ 關鍵：集滿 20 個就停止
                     break
                 offsets_x.append(round(start_x + c * spacing, 3))
                 offsets_y.append(round(start_y + r * spacing, 3))
@@ -66,16 +70,14 @@ class FormationManagerNode(Node):
         return offsets_x, offsets_y
 
     def generate_circle_formation(self, radius=3.2):
-        """環形 (Circle): 均勻分佈於半徑 R 的圓周上"""
+        """環形：限制只生成 active_slots (20 個)"""
         offsets_x, offsets_y = [], []
-        angle_step = (2 * math.pi) / self.num_robots
+        angle_step = (2 * math.pi) / self.active_slots  # ★ 依 20 等分切分
         
-        for i in range(self.num_robots):
+        for i in range(self.active_slots):
             angle = i * angle_step
-            x = radius * math.cos(angle)
-            y = radius * math.sin(angle)
-            offsets_x.append(round(x, 3))
-            offsets_y.append(round(y, 3))
+            offsets_x.append(round(radius * math.cos(angle), 3))
+            offsets_y.append(round(radius * math.sin(angle), 3))
         return offsets_x, offsets_y
 
     def generate_wedge_formation(self, spacing=1.0, angle_deg=60):
@@ -88,8 +90,8 @@ class FormationManagerNode(Node):
         offsets_y.append(2.0)
 
         # 左右兩翼展開
-        left_count = (self.num_robots - 1) // 2
-        right_count = (self.num_robots - 1) - left_count
+        left_count = (self.active_slots - 1) // 2
+        right_count = (self.active_slots - 1) - left_count
 
         for i in range(1, left_count + 1):
             offsets_x.append(round(-i * spacing * math.sin(theta), 3))
@@ -104,7 +106,7 @@ class FormationManagerNode(Node):
     def generate_column_formation(self, row_spacing=1.2, col_spacing=2.5):
         """雙縱列 (Double Column): 兩條平行縱隊，適合狹窄通道巡航"""
         offsets_x, offsets_y = [], []
-        half = self.num_robots // 2
+        half = self.active_slots // 2
         
         # 左列
         for i in range(half):
@@ -112,16 +114,29 @@ class FormationManagerNode(Node):
             offsets_y.append(round((i - half / 2.0) * row_spacing, 3))
 
         # 右列
-        for i in range(half, self.num_robots):
+        for i in range(half, self.num_slots):
             offsets_x.append(round(col_spacing / 2.0, 3))
             offsets_y.append(round((i - half - half / 2.0) * row_spacing, 3))
 
+        return offsets_x, offsets_y
+
+    def generate_standby_slots(self, num_standby, standby_center_y=-10.0, spacing=1.2):
+        """在陣型下方生成一字排開的充電待命樁"""
+        offsets_x, offsets_y = [], []
+        start_x = -((num_standby - 1) * spacing) / 2.0
+        for i in range(num_standby):
+            offsets_x.append(round(start_x + i * spacing, 3))
+            offsets_y.append(standby_center_y)
         return offsets_x, offsets_y
 
     # ==========================================
     # 變換調度與發布邏輯
     # ==========================================
     def switch_to_formation(self, shape_name: str):
+
+        active_slots = 20  # 場上需求車數
+        num_standby = self.num_robots - active_slots  # 待命車數 (例如 6)
+
         shape_name = shape_name.lower().strip()
 
         if shape_name == 'grid':
@@ -135,6 +150,9 @@ class FormationManagerNode(Node):
         else:
             self.get_logger().warn(f"未知陣型名稱 '{shape_name}'，保持原陣型。")
             return
+
+        ox = ox[:active_slots]
+        oy = oy[:active_slots]
 
         self.formation_version += 1
         payload = {

@@ -303,12 +303,18 @@ class RobotAgentNode(Node):
 
     def calculate_slot_utility(self, slot_idx: int) -> float:
         """計算自己前往特定 Slot 的 BN 勝率"""
+        if self.voltage <= 11.10:
+            return 0.0001
+        
         target_x = self.target_center_x + self.slot_offsets_x[slot_idx]
         target_y = self.target_center_y + self.slot_offsets_y[slot_idx]
         dist = math.hypot(self.pos_x - target_x, self.pos_y - target_y)
 
         time_req = (dist / self.max_speed) if self.max_speed > 0 else 99.0
         exp_battery = self.estimate_battery_consumption(dist, self.max_speed)
+
+        if exp_battery <= 11.10:
+            return 0.001
 
         c_state = get_time_state(time_req)
         d_state = battery_state(exp_battery)
@@ -405,50 +411,56 @@ class RobotAgentNode(Node):
         self.bid_pub.publish(msg)
 
     def bid_callback(self, msg):
-        # 只有拍賣者需要處理投標，且必須在 BIDDING 階段
         if not self.is_auctioneer or self.stage != 'BIDDING':
             return
 
         data = json.loads(msg.data)
-        sender_id = data['id']
-        
-        # 首次收到該車出價時印出日誌，方便即時追蹤進度
-        if sender_id not in self.collected_bids:
-            self.collected_bids[sender_id] = data['utilities']
-            self.get_logger().info(
-                f"📥 收到 Robot {sender_id} 出價 | 進度: [{len(self.collected_bids)}/{self.num_robots} 出價:{self.collected_bids[sender_id]}]"
-            )
+        self.collected_bids[data['id']] = data['utilities']
 
-        # 集滿 26 台車的出價後，立即執行匈牙利演算法
         if len(self.collected_bids) >= self.num_robots:
-            self.stage = 'OPTIMIZING'  # 狀態立即上鎖，防止高頻心跳造成重複計算
-            self.get_logger().info("🎯 已集齊全隊出價向量！Auctioneer 開始執行匈牙利最佳化分配...")
-
+            self.stage = 'OPTIMIZING'
             robot_ids = sorted(list(self.collected_bids.keys()))
-            utility_matrix = np.zeros((self.num_robots, self.num_slots))
+
+            num_robots = len(robot_ids)
+            num_slots = self.num_slots
+
+            # ★ 印出檢查：這裡必須顯示 26 x 20
+            self.get_logger().info(f"📊 建立長方形指派矩陣: {num_robots} 台小車 搶 {num_slots} 個槽位")
+
+            utility_matrix = np.zeros((num_robots, num_slots))
             for i, r_id in enumerate(robot_ids):
-                utility_matrix[i, :] = self.collected_bids[r_id]
+                # 確保只取前 num_slots 個出價
+                utility_matrix[i, :] = self.collected_bids[r_id][:num_slots]
 
-            # 匈牙利演算法最大化指派
-            cost_matrix = 2.0 - utility_matrix
-            row_ind, col_ind = linear_sum_assignment(cost_matrix)
+            # 執行長方形最大化指派
+            row_ind, col_ind = linear_sum_assignment(utility_matrix, maximize=True)
 
-            winners = [-1] * self.num_slots
+            winners = [-1] * num_slots
+            assigned_robot_ids = set()
+
             for r_idx, s_idx in zip(row_ind, col_ind):
-                winners[int(s_idx)] = robot_ids[r_idx]
+                assigned_robot_id = robot_ids[r_idx]
+                winners[int(s_idx)] = assigned_robot_id
+                assigned_robot_ids.add(assigned_robot_id)
 
-            # 廣播全域分配名單
+            # ★ 找出落選的待命小車名單
+            unassigned_robots = [r for r in robot_ids if r not in assigned_robot_ids]
+
+            self.get_logger().info(f"🏆 指派完成！場上 (20台): {sorted(list(assigned_robot_ids))}")
+            self.get_logger().warn(f"💤 待命退場 (6台): {unassigned_robots}")
+
+            # 廣播指派名單與待命名單
             assign_msg = String()
             assign_msg.data = json.dumps({
                 'auctioneer_id': self.robot_id,
                 'winners': winners,
-                'slot_offsets_x': self.slot_offsets_x,
-                'slot_offsets_y': self.slot_offsets_y,
+                'unassigned': unassigned_robots,
+                'slot_offsets_x': self.slot_offsets_x[:num_slots],
+                'slot_offsets_y': self.slot_offsets_y[:num_slots],
                 'target_center_x': self.target_center_x,
                 'target_center_y': self.target_center_y
             })
             self.assignment_pub.publish(assign_msg)
-            self.get_logger().info(f"🏆 全域指派完成！名單已發布: {winners}")
 
     def assignment_callback(self, msg):
         if self.stage == 'ASSIGNED':
@@ -456,24 +468,40 @@ class RobotAgentNode(Node):
 
         data = json.loads(msg.data)
         winners = data['winners']
+        unassigned = data.get('unassigned', [])
 
+        self.stage = 'ASSIGNED'
+        if hasattr(self, 'bid_timer') and not self.bid_timer.is_canceled():
+            self.bid_timer.cancel()
+
+        # ==========================================
+        # 情況 A：成功入選場上編隊 (20 台車之一)
+        # ==========================================
         if self.robot_id in winners:
-            self.stage = 'ASSIGNED'
-            
-            # 關閉選舉與出價定時器
-            if hasattr(self, 'election_timer') and not self.election_timer.is_canceled():
-                self.election_timer.cancel()
-            if hasattr(self, 'bid_timer') and not self.bid_timer.is_canceled():
-                self.bid_timer.cancel()
-
             self.assigned_slot = winners.index(self.robot_id)
-            tx = self.target_center_x + self.slot_offsets_x[self.assigned_slot]
-            ty = self.target_center_y + self.slot_offsets_y[self.assigned_slot]
+            tx = data['target_center_x'] + data['slot_offsets_x'][self.assigned_slot]
+            ty = data['target_center_y'] + data['slot_offsets_y'][self.assigned_slot]
             self.target_slot_pos = (tx, ty)
 
-            self.get_logger().info(
-                f"🎉 Robot {self.robot_id} 成功確認 Slot {self.assigned_slot} -> 目標: ({tx:.2f}, {ty:.2f})"
-            )
+            self.get_logger().info(f"🎯 Robot {self.robot_id} 入選編隊 -> 前往任務 Slot {self.assigned_slot} ({tx:.2f}, {ty:.2f}) Voltage {self.voltage:.4f}")
+
+        # ==========================================
+        # 情況 B：落選，自動前往下方待命充電區
+        # ==========================================
+        elif self.robot_id in unassigned:
+            standby_index = unassigned.index(self.robot_id)
+            num_standby = len(unassigned)
+            spacing = 1.2
+            
+            # 在陣型下方 (y = -5.0) 均勻排列充電樁
+            start_x = -((num_standby - 1) * spacing) / 2.0
+            tx = start_x + (standby_index * spacing)
+            ty = -10.0  # 待命區 Y 座標
+            
+            self.assigned_slot = -1  # 標記為無場上任務
+            self.target_slot_pos = (tx, ty)
+
+            self.get_logger().warn(f"💤 Robot {self.robot_id} 未分配到陣型任務，前往待命充電樁 {standby_index} ({tx:.2f}, {ty:.2f}) Voltage {self.voltage:.4f}")
 
 def main(args=None):
     rclpy.init(args=args)

@@ -245,7 +245,7 @@ def generate_launch_description():
             parameters=[{
                 'robot_id': r_id,
                 'num_robots': len(robot_configs),
-                'num_slots': len(slot_offsets_x),
+                'num_slots': len(robot_configs),
                 'max_speed': float(config['max_speed']),
                 'sensor_quality': str(config['sensor_quality']),
                 'voltage': 12.0,
@@ -296,6 +296,8 @@ def generate_launch_description():
             'auto_switch': True,         # 若設為 True，每隔 25 秒會自動輪播變換陣型
             'switch_interval': 25.0,
             'default_formation': 'grid',  # 初始啟動陣型 (可選: grid, circle, wedge, column)
+            'num_slots': 20,
+            'active_slots': 20,
         }],
         output='screen'
     )

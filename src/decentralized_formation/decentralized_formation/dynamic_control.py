@@ -58,6 +58,9 @@ class FormationControlAgent(Node):
         self.k_v1 = 3.0    # 速度線性阻力係數
         self.k_v2 = 5.0    # 速度二次方電機耗能係數
 
+        self.charge_rate = 0.08  # 充電速度: 0.08 V/s (每 10 秒約充回 0.8V)
+        self.battery_max_limit = 12.10
+
         # 2. 訂閱當選 Auctioneer 發布的匈牙利指派名單
         self.create_subscription(
             String, 
@@ -192,7 +195,26 @@ class FormationControlAgent(Node):
         # 4. 運動學積分更新真實座標
         self.state[0] += u_x * self.timer_period
         self.state[1] += u_y * self.timer_period
-        
+
+        """
+        current_speed = math.hypot(u_x, u_y)
+        dist_to_goal = math.hypot(self.state[0] - self.target_x, self.state[1] - self.target_y) if self.target_x is not None else 99.0
+
+        in_charging_zone = (self.state[1] <= -3.5) and (dist_to_goal < 0.3)
+
+        if in_charging_zone:
+            # 1. 待命充電模式：電壓上升
+            if self.voltage < self.battery_max_limit:
+                self.voltage = min(self.battery_max_limit, self.voltage + self.charge_rate * self.timer_period)
+                if self.loop_counter % 100 == 0:  # 每 2 秒提示一次
+                    self.get_logger().info(f"⚡ Robot {self.robot_id} 正在待命樁補電中... 當前電量: {self.voltage:.2f}V")
+        else:
+            # 2. 正常任務耗電模式 (物理功耗積分)
+            p_total = self.p_base + self.p_sensor + (self.k_v1 * current_speed + self.k_v2 * (current_speed ** 2))
+            dv = (p_total * self.timer_period) / (self.battery_capacity * 3600.0 * 11.1) * 1.6
+            self.voltage = max(10.0, self.voltage - dv)
+        """
+            
         self.broadcast_state()
             
     def broadcast_state(self):
